@@ -13,17 +13,24 @@ namespace GameOfLifeService.Core
                 throw new System.ArgumentException("The starting state must be valid:\n" + String.Join("\n", errors));
             }
 
-            ISet<(ushort Row, ushort Col)> survivingCells = new HashSet<(ushort Row, ushort Col)>();
-
-            // This is nowhere near the fastest algorithm, but whatever.
-            for (ushort i = 0; i < state.Height; i++)
+            // We only need to check cells that are live or adjacent to an existing live cell.
+            // For large, sparse grids, this is a pretty big optimization.
+            ISet<(ushort Row, ushort Col)> potentialSurvivors = new HashSet<(ushort Row, ushort Col)>();
+            foreach ((ushort Row, ushort Col) liveCoords in state.LiveCells)
             {
-                for (ushort j = 0; j < state.Width; j++)
+                potentialSurvivors.Add(liveCoords);
+                foreach ((ushort Row, ushort Col) neighborCoords in GetNeighbors(liveCoords, state))
                 {
-                    if (ShouldSurvive((i, j), state))
-                    {
-                        survivingCells.Add((i, j));
-                    }
+                    potentialSurvivors.Add(neighborCoords);
+                }
+            }
+
+            ISet<(ushort Row, ushort Col)> survivingCells = new HashSet<(ushort Row, ushort Col)>();
+            foreach ((ushort Row, ushort Col) coords in potentialSurvivors)
+            {
+                if (ShouldSurvive(coords, state))
+                {
+                    survivingCells.Add(coords);
                 }
             }
 
@@ -39,9 +46,22 @@ namespace GameOfLifeService.Core
 
         private static uint CountNeighbors((ushort Row, ushort Col) coords, GameOfLifeState state)
         {
+            uint neighborCount = 0;
+            foreach ((ushort Row, ushort Col) neighborCoords in GetNeighbors(coords, state))
+            {
+                if (state.LiveCells.Contains(neighborCoords))
+                {
+                    neighborCount++;
+                }
+            }
+            return neighborCount;
+        }
+
+        private static ISet<(ushort Row, ushort Col)> GetNeighbors((ushort Row, ushort Col) coords, GameOfLifeState state)
+        {
             ushort i = coords.Row;
             ushort j = coords.Col;
-            uint neighborCount = 0;
+            ISet<(ushort Row, ushort Col)> neighbors = new HashSet<(ushort Row, ushort Col)>();
 
             int[] offsets = new int[] { -1, 0, 1 };
             foreach (int rowOffset in offsets)
@@ -50,14 +70,10 @@ namespace GameOfLifeService.Core
                 {
                     if (rowOffset == 0 && colOffset == 0) continue; // Skip self
 
-                    (ushort Row, ushort Col) neighborCoords = NormalizeCoordinates((i + rowOffset, j + colOffset), state);
-                    if (state.LiveCells.Contains(neighborCoords))
-                    {
-                        neighborCount++;
-                    }
+                    neighbors.Add(NormalizeCoordinates((i + rowOffset, j + colOffset), state));
                 }
             }
-            return neighborCount;
+            return neighbors;
         }
 
         private static (ushort Row, ushort Col) NormalizeCoordinates((int Row, int Col) coords, GameOfLifeState state)
