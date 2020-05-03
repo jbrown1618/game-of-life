@@ -6,18 +6,21 @@ namespace GameOfLifeService.Tests.Core
 {
     public class IteratorTest
     {
+        // TODO: Mock the validator
+        private Iterator iterator = new Iterator(new Validator());
+
         [Fact]
         public void Iterate_InvalidState_Throws()
         {
             GameOfLifeState state = new GameOfLifeState(5, 5, null);
-            Assert.Throws<System.ArgumentException>(() => Iterator.Iterate(state));
+            Assert.Throws<System.ArgumentException>(() => iterator.Iterate(state));
         }
 
         [Fact]
         public void Iterate_TrivialState_ReturnsSame()
         {
             GameOfLifeState state = new GameOfLifeState(0, 0);
-            GameOfLifeState next = Iterator.Iterate(state);
+            GameOfLifeState next = iterator.Iterate(state);
             Assert.Equal(state, next);
         }
 
@@ -25,7 +28,7 @@ namespace GameOfLifeService.Tests.Core
         public void Iterate_DeadState_ReturnsSame()
         {
             GameOfLifeState state = new GameOfLifeState(10, 10);
-            GameOfLifeState next = Iterator.Iterate(state);
+            GameOfLifeState next = iterator.Iterate(state);
             Assert.Equal(state, next);
         }
 
@@ -35,7 +38,7 @@ namespace GameOfLifeService.Tests.Core
             GameOfLifeState state = new GameOfLifeState(4, 4, new HashSet<(ushort Row, ushort Col)> {
                 (1, 1), (1, 2), (2, 1), (2, 2)
             });
-            GameOfLifeState next = Iterator.Iterate(state);
+            GameOfLifeState next = iterator.Iterate(state);
             Assert.Equal(state, next);
         }
 
@@ -45,7 +48,7 @@ namespace GameOfLifeService.Tests.Core
             GameOfLifeState state = new GameOfLifeState(5, 6, new HashSet<(ushort Row, ushort Col)> {
                 (1, 2), (1, 3), (2, 1), (2, 4), (3, 2), (3, 3)
             });
-            GameOfLifeState next = Iterator.Iterate(state);
+            GameOfLifeState next = iterator.Iterate(state);
             Assert.Equal(state, next);
         }
 
@@ -55,7 +58,7 @@ namespace GameOfLifeService.Tests.Core
             GameOfLifeState state = new GameOfLifeState(6, 6, new HashSet<(ushort Row, ushort Col)> {
                 (1, 2), (1, 3), (2, 1), (2, 4), (3, 2), (3, 4), (4, 3)
             });
-            GameOfLifeState next = Iterator.Iterate(state);
+            GameOfLifeState next = iterator.Iterate(state);
             Assert.Equal(state, next);
         }
 
@@ -65,7 +68,7 @@ namespace GameOfLifeService.Tests.Core
             GameOfLifeState state = new GameOfLifeState(5, 5, new HashSet<(ushort Row, ushort Col)> {
                 (1, 2), (2, 1), (2, 3), (3, 2)
             });
-            GameOfLifeState next = Iterator.Iterate(state);
+            GameOfLifeState next = iterator.Iterate(state);
             Assert.Equal(state, next);
         }
 
@@ -75,10 +78,10 @@ namespace GameOfLifeService.Tests.Core
             GameOfLifeState state = new GameOfLifeState(5, 5, new HashSet<(ushort Row, ushort Col)> {
                 (2, 1), (2, 2), (2, 3)
             });
-            GameOfLifeState next = Iterator.Iterate(state);
+            GameOfLifeState next = iterator.Iterate(state);
             Assert.NotEqual(state, next);
 
-            next = Iterator.Iterate(next);
+            next = iterator.Iterate(next);
             Assert.Equal(state, next);
         }
 
@@ -98,12 +101,12 @@ namespace GameOfLifeService.Tests.Core
                 (13, 5)
             });
 
-            GameOfLifeState next = Iterator.Iterate(state);
+            GameOfLifeState next = iterator.Iterate(state);
 
             int p = 1;
             while (!state.Equals(next))
             {
-                next = Iterator.Iterate(next);
+                next = iterator.Iterate(next);
                 p++;
 
             }
@@ -116,12 +119,12 @@ namespace GameOfLifeService.Tests.Core
             GameOfLifeState state = new GameOfLifeState(100, 100, new HashSet<(ushort Row, ushort Col)> {
                 (1, 2), (2, 3), (3, 1), (3, 2), (3, 3)
             });
-            GameOfLifeState next = Iterator.Iterate(state);
+            GameOfLifeState next = iterator.Iterate(state);
 
             int p = 1;
             while (!state.Equals(next))
             {
-                next = Iterator.Iterate(next);
+                next = iterator.Iterate(next);
                 p++;
 
             }

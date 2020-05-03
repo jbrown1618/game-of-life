@@ -25,6 +25,7 @@ namespace GameOfLifeService.DTO
                 dto.LiveCells[i] = new CoordinateDTO();
                 dto.LiveCells[i].Row = coords.Row;
                 dto.LiveCells[i].Col = coords.Col;
+                i++;
             }
 
             return dto;
