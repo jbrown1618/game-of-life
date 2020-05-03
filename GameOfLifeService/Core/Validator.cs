@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace GameOfLifeService.Core
 {
-    public static class Validator
+    public class Validator : IValidator
     {
-        public static ISet<string> Validate(GameOfLifeState state)
+        public ISet<string> Validate(GameOfLifeState state)
         {
             ISet<string> errors = new HashSet<string>();
             if (state.LiveCells == null)
@@ -27,22 +27,22 @@ namespace GameOfLifeService.Core
             return errors;
         }
 
-        private static string MissingLiveCells()
+        private string MissingLiveCells()
         {
             return "Live cells missing";
         }
 
-        private static string Duplicates()
+        private string Duplicates()
         {
             return "Duplicates present in the list of live cells";
         }
 
-        private static string RowOutOfRange(ushort row, ushort col, ushort height)
+        private string RowOutOfRange(ushort row, ushort col, ushort height)
         {
             return $"Live cell coordinate ({row}, {col}) is out of range; the row index must be < {height}";
         }
 
-        private static string ColOutOfRange(ushort row, ushort col, ushort width)
+        private string ColOutOfRange(ushort row, ushort col, ushort width)
         {
             return $"Live cell coordinate ({row}, {col}) is out of range; the column index must be < {width}";
         }

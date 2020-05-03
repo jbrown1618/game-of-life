@@ -12,10 +12,12 @@ namespace GameOfLifeService.Controllers
     {
 
         private readonly ILogger<GameOfLifeController> _logger;
+        private IIterator _iterator;
 
-        public GameOfLifeController(ILogger<GameOfLifeController> logger)
+        public GameOfLifeController(ILogger<GameOfLifeController> logger, IIterator iterator)
         {
             _logger = logger;
+            _iterator = iterator;
         }
 
         [HttpGet]
@@ -23,9 +25,13 @@ namespace GameOfLifeService.Controllers
         {
             if (width <= 0 || height <= 0)
             {
-                return StatusCode(500, "Width and Height must be positive");
+                return StatusCode(500, "Width and Height must be > 0");
             }
-            GameOfLifeStateDTO dto = GameOfLifeStateDTO.ToDTO(new GameOfLifeState(10, 10));
+            if (height > ushort.MaxValue || width > ushort.MaxValue)
+            {
+                return StatusCode(500, $"Width and Height must be < {ushort.MaxValue}");
+            }
+            GameOfLifeStateDTO dto = GameOfLifeStateDTO.ToDTO(new GameOfLifeState((ushort)width, (ushort)height));
             return StatusCode(200, dto);
         }
 
@@ -33,15 +39,16 @@ namespace GameOfLifeService.Controllers
         public IActionResult Iterate(GameOfLifeStateDTO dto)
         {
             GameOfLifeState previous = GameOfLifeStateDTO.FromDTO(dto);
-            ISet<string> errors = Validator.Validate(previous);
-            if (errors.Count > 0)
+            try
             {
-                return StatusCode(500, errors);
+                GameOfLifeState next = _iterator.Iterate(previous);
+                GameOfLifeStateDTO nextDto = GameOfLifeStateDTO.ToDTO(next);
+                return StatusCode(200, nextDto);
             }
-            GameOfLifeState next = Iterator.Iterate(previous);
-            GameOfLifeStateDTO nextDto = GameOfLifeStateDTO.ToDTO(next);
-
-            return StatusCode(200, nextDto);
+            catch (System.ArgumentException e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }

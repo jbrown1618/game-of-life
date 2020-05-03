@@ -3,11 +3,18 @@ using System.Collections.Generic;
 
 namespace GameOfLifeService.Core
 {
-    public static class Iterator
+    public class Iterator : IIterator
     {
-        public static GameOfLifeState Iterate(GameOfLifeState state)
+        private IValidator _validator;
+
+        public Iterator(IValidator validator)
         {
-            ISet<string> errors = Validator.Validate(state);
+            this._validator = validator;
+        }
+
+        public GameOfLifeState Iterate(GameOfLifeState state)
+        {
+            ISet<string> errors = _validator.Validate(state);
             if (errors.Count > 0)
             {
                 throw new System.ArgumentException("The starting state must be valid:\n" + String.Join("\n", errors));
@@ -37,14 +44,14 @@ namespace GameOfLifeService.Core
             return new GameOfLifeState(state.Width, state.Height, survivingCells);
         }
 
-        private static bool ShouldSurvive((ushort Row, ushort Col) coords, GameOfLifeState state)
+        private bool ShouldSurvive((ushort Row, ushort Col) coords, GameOfLifeState state)
         {
             bool living = state.LiveCells.Contains(coords);
             uint numNeighbors = CountNeighbors(coords, state);
             return numNeighbors == 3 || (living && numNeighbors == 2);
         }
 
-        private static uint CountNeighbors((ushort Row, ushort Col) coords, GameOfLifeState state)
+        private uint CountNeighbors((ushort Row, ushort Col) coords, GameOfLifeState state)
         {
             uint neighborCount = 0;
             foreach ((ushort Row, ushort Col) neighborCoords in GetNeighbors(coords, state))
@@ -57,7 +64,7 @@ namespace GameOfLifeService.Core
             return neighborCount;
         }
 
-        private static ISet<(ushort Row, ushort Col)> GetNeighbors((ushort Row, ushort Col) coords, GameOfLifeState state)
+        private ISet<(ushort Row, ushort Col)> GetNeighbors((ushort Row, ushort Col) coords, GameOfLifeState state)
         {
             ushort i = coords.Row;
             ushort j = coords.Col;
@@ -76,7 +83,7 @@ namespace GameOfLifeService.Core
             return neighbors;
         }
 
-        private static (ushort Row, ushort Col) NormalizeCoordinates((int Row, int Col) coords, GameOfLifeState state)
+        private (ushort Row, ushort Col) NormalizeCoordinates((int Row, int Col) coords, GameOfLifeState state)
         {
             return (
                 (ushort)((coords.Row + state.Height) % state.Height),
