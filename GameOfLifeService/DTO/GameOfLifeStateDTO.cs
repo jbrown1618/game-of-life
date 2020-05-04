@@ -13,6 +13,7 @@ namespace GameOfLifeService.DTO
 
         public static GameOfLifeStateDTO ToDTO(GameOfLifeState state)
         {
+            if (state == null) return null;
 
             GameOfLifeStateDTO dto = new GameOfLifeStateDTO();
             dto.Width = state.Width;
@@ -33,6 +34,8 @@ namespace GameOfLifeService.DTO
 
         public static GameOfLifeState FromDTO(GameOfLifeStateDTO dto)
         {
+            if (dto == null) return null;
+
             ISet<(ushort Row, ushort Col)> liveCells = new HashSet<(ushort Row, ushort Col)>();
             if (dto.LiveCells == null)
             {
