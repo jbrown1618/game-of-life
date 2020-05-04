@@ -36,7 +36,7 @@ namespace GameOfLifeService.DTO
         {
             if (dto == null) return null;
 
-            ISet<(ushort Row, ushort Col)> liveCells = new HashSet<(ushort Row, ushort Col)>();
+            var liveCells = new HashSet<(ushort Row, ushort Col)>();
             if (dto.LiveCells == null)
             {
                 return new GameOfLifeState(dto.Width, dto.Height);

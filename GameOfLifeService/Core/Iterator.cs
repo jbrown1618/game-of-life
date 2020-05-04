@@ -22,18 +22,18 @@ namespace GameOfLifeService.Core
 
             // We only need to check cells that are live or adjacent to an existing live cell.
             // For large, sparse grids, this is a pretty big optimization.
-            ISet<(ushort Row, ushort Col)> potentialSurvivors = new HashSet<(ushort Row, ushort Col)>();
-            foreach ((ushort Row, ushort Col) liveCoords in state.LiveCells)
+            var potentialSurvivors = new HashSet<(ushort Row, ushort Col)>();
+            foreach (var liveCoords in state.LiveCells)
             {
                 potentialSurvivors.Add(liveCoords);
-                foreach ((ushort Row, ushort Col) neighborCoords in GetNeighbors(liveCoords, state))
+                foreach (var neighborCoords in GetNeighbors(liveCoords, state))
                 {
                     potentialSurvivors.Add(neighborCoords);
                 }
             }
 
-            ISet<(ushort Row, ushort Col)> survivingCells = new HashSet<(ushort Row, ushort Col)>();
-            foreach ((ushort Row, ushort Col) coords in potentialSurvivors)
+            var survivingCells = new HashSet<(ushort Row, ushort Col)>();
+            foreach (var coords in potentialSurvivors)
             {
                 if (ShouldSurvive(coords, state))
                 {
@@ -53,8 +53,8 @@ namespace GameOfLifeService.Core
 
         private uint CountNeighbors((ushort Row, ushort Col) coords, GameOfLifeState state)
         {
-            uint neighborCount = 0;
-            foreach ((ushort Row, ushort Col) neighborCoords in GetNeighbors(coords, state))
+            var neighborCount = 0u;
+            foreach (var neighborCoords in GetNeighbors(coords, state))
             {
                 if (state.LiveCells.Contains(neighborCoords))
                 {
@@ -70,7 +70,7 @@ namespace GameOfLifeService.Core
             ushort j = coords.Col;
             ISet<(ushort Row, ushort Col)> neighbors = new HashSet<(ushort Row, ushort Col)>();
 
-            int[] offsets = new int[] { -1, 0, 1 };
+            var offsets = new int[] { -1, 0, 1 };
             foreach (int rowOffset in offsets)
             {
                 foreach (int colOffset in offsets)
