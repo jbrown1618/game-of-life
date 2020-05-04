@@ -6,7 +6,7 @@ namespace GameOfLifeService.Core
     {
         public ISet<string> Validate(GameOfLifeState state)
         {
-            ISet<string> errors = new HashSet<string>();
+            var errors = new HashSet<string>();
             if (state.LiveCells == null)
             {
                 errors.Add(MissingLiveCells());

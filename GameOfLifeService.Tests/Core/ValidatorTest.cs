@@ -12,7 +12,7 @@ namespace GameOfLifeService.Tests.Core
         [Fact]
         public void Validate_ValidState_ReturnsEmptySet()
         {
-            GameOfLifeState state = new GameOfLifeState(5, 5);
+            var state = new GameOfLifeState(5, 5);
             Assert.Empty(validator.Validate(state));
 
             state = new GameOfLifeState(5, 5, new HashSet<(ushort Row, ushort Col)> { (1, 1), (1, 2) });
@@ -22,7 +22,7 @@ namespace GameOfLifeService.Tests.Core
         [Fact]
         public void Validate_OutOfBounds_ReturnsErrorsForEachDimension()
         {
-            GameOfLifeState state = new GameOfLifeState(5, 5, new HashSet<(ushort Row, ushort Col)> { (1, 5) });
+            var state = new GameOfLifeState(5, 5, new HashSet<(ushort Row, ushort Col)> { (1, 5) });
             Assert.Equal(1, validator.Validate(state).Count);
 
             state = new GameOfLifeState(5, 5, new HashSet<(ushort Row, ushort Col)> { (5, 1) });
@@ -35,7 +35,7 @@ namespace GameOfLifeService.Tests.Core
         [Fact]
         public void Validate_OutOfBounds_ReturnsErrorsForEachOccurrence()
         {
-            GameOfLifeState state = new GameOfLifeState(5, 5, new HashSet<(ushort Row, ushort Col)> {
+            var state = new GameOfLifeState(5, 5, new HashSet<(ushort Row, ushort Col)> {
                 (1, 1),
                 (5, 1), // 1 error
                 (1, 5), // 1 error
@@ -48,7 +48,7 @@ namespace GameOfLifeService.Tests.Core
         [Fact]
         public void Validate_NullLiveCells_ReturnsOneError()
         {
-            GameOfLifeState state = new GameOfLifeState(5, 5, null);
+            var state = new GameOfLifeState(5, 5, null);
             Assert.Equal(1, validator.Validate(state).Count);
         }
     }

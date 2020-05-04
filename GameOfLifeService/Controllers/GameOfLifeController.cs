@@ -27,7 +27,7 @@ namespace GameOfLifeService.Controllers
             {
                 return StatusCode(500, $"Width and Height must be < {ushort.MaxValue}");
             }
-            GameOfLifeStateDTO dto = GameOfLifeStateDTO.ToDTO(new GameOfLifeState((ushort)width, (ushort)height));
+            var dto = GameOfLifeStateDTO.ToDTO(new GameOfLifeState((ushort)width, (ushort)height));
             return StatusCode(200, dto);
         }
 
@@ -38,7 +38,7 @@ namespace GameOfLifeService.Controllers
             try
             {
                 GameOfLifeState next = _iterator.Iterate(previous);
-                GameOfLifeStateDTO nextDto = GameOfLifeStateDTO.ToDTO(next);
+                var nextDto = GameOfLifeStateDTO.ToDTO(next);
                 return StatusCode(200, nextDto);
             }
             catch (System.ArgumentException e)

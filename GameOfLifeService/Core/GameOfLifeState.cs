@@ -25,7 +25,7 @@ namespace GameOfLifeService.Core
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType()) return false;
-            GameOfLifeState other = (GameOfLifeState)obj;
+            var other = (GameOfLifeState)obj;
 
             if (other.Width != this.Width) return false;
             if (other.Height != this.Height) return false;
