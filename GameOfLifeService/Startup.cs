@@ -42,6 +42,8 @@ namespace GameOfLifeService
             {
                 endpoints.MapControllers();
             });
+
+            app.UseStaticFiles();
         }
     }
 }
