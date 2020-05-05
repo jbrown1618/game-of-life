@@ -1,0 +1,54 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Game of Life</title>
+    <style>
+        html {
+            background: #1b1b1b;
+        }
+
+        button {
+            font-size: 14px;
+            background: #1b1b1b;
+            color: #cfcfcf;
+        }
+
+        button[disabled] {
+            color: gray;
+            border-color: gray;
+        }
+
+        .board {
+            display: grid;
+        }
+
+        .cell {
+            margin: 1px;
+            border: 1px solid #404040;
+        }
+
+        .cell:hover {
+            background: #404040;
+        }
+
+        .cell.live {
+            background: #4fb83e;
+        }
+
+        .cell.live:hover {
+            background: #64e84f;
+        }
+    </style>
+    <script src="./index.js" onload="init()"></script>
+</head>
+
+<body>
+    <button class="play-pause-button" onclick="togglePlay()">Play</button>
+    <button class="iterate-button" onclick="iterate()">Iterate</button>
+    <button class="clear-button" onclick="clearBoard()">Clear</button>
+    <br>
+    <div class="board"></div>
+</body>
+
+</html>
