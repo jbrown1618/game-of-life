@@ -2,6 +2,10 @@ using System.Collections.Generic;
 
 namespace GameOfLifeService.Core
 {
+    /// <summary>
+    /// GameOfLifeState contains all of the information necessary to uniquely specify
+    /// a state in Conway's Game of Life.
+    /// </summary>
     public class GameOfLifeState
     {
         public ushort Width { get; }

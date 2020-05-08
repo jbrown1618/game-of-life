@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace GameOfLifeService.Core
 {
+    /// <inheritdoc cref="IIterator"/>
     public class Iterator : IIterator
     {
         private IValidator _validator;

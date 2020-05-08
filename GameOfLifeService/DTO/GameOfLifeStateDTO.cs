@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using GameOfLifeService.Core;
 
+/// <summary>
+/// A serializable format containing all the information in a <see cref="GameOfLifeState"/>.
+/// </summary>
 namespace GameOfLifeService.DTO
 {
     public class GameOfLifeStateDTO
@@ -11,6 +14,12 @@ namespace GameOfLifeService.DTO
 
         public GameOfLifeStateDTO() { }
 
+        /// <summary>
+        /// ToDTO constructs a serializable <see cref="GameOfLifeStateDTO"/> from
+        /// a <see cref="GameOfLifeState"/>
+        /// </summary>
+        /// <param name="state">The GameOfLifeState to convert</param>
+        /// <returns>A new DTO</returns>
         public static GameOfLifeStateDTO ToDTO(GameOfLifeState state)
         {
             if (state == null) return null;
@@ -32,6 +41,12 @@ namespace GameOfLifeService.DTO
             return dto;
         }
 
+        /// <summary>
+        /// FromDTO constructs a <see cref="GameOfLifeState"/> from
+        /// a serializable <see cref="GameOfLifeStateDTO"/>
+        /// </summary>
+        /// <param name="dto">The GameOfLifeStateDTO to convert</param>
+        /// <returns>A new state</returns>
         public static GameOfLifeState FromDTO(GameOfLifeStateDTO dto)
         {
             if (dto == null) return null;

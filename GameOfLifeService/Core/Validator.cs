@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 namespace GameOfLifeService.Core
 {
+    /// <inheritdoc cref="IValidator"/>
     public class Validator : IValidator
     {
         public ISet<string> Validate(GameOfLifeState state)
